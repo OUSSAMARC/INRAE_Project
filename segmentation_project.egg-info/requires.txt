@@ -1,0 +1,7 @@
+numpy
+torch
+matplotlib
+opencv-python
+scikit-learn
+Pillow
+python-dotenv

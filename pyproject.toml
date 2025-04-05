@@ -1,0 +1,21 @@
+[project]
+name = "segmentation_project"
+version = "0.1.0"
+description = "Plant disease segmentation using PyTorch"
+authors = [{ name="Rchaki", email="rchaki@example.com" }]
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+    "numpy",
+    "torch",
+    "matplotlib",
+    "opencv-python",
+    "scikit-learn",
+    "Pillow",
+    "python-dotenv"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
