@@ -15,7 +15,19 @@ dependencies = [
     "Pillow",
     "python-dotenv"
 ]
-
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+[tool.black]
+line-length = 88
+target-version = ['py310']  # ou 'py39', 'py311', etc. selon ta version de Python
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.env
+  | build
+  | dist
+  | .*\.egg-info
+)/
+'''
