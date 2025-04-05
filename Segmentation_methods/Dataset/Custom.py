@@ -38,7 +38,6 @@ class Custom(Dataset):
         mask_rgb = self.masks[idx]                           # (H, W, 3)
         mask_class = rgb_to_class(mask_rgb)                  # (H, W)
 
-        # Torch versions
         mask_rgb_tensor = torch.from_numpy(mask_rgb)         # pour affichage
         mask_class_tensor = torch.from_numpy(mask_class).long()  # pour entraînement
 
