@@ -9,14 +9,11 @@ requires-python = ">=3.9"
 dependencies = [
     "numpy",
     "torch",
-    "torchvision",
     "matplotlib",
     "opencv-python",
     "scikit-learn",
     "Pillow",
-    "python-dotenv",
-    "tqdm",
-    "segmentation_models_pytorch",
+    "python-dotenv"
 ]
 [build-system]
 requires = ["setuptools", "wheel"]
