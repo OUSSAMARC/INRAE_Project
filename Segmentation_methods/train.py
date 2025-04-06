@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from torch import nn, optim
 from tqdm import tqdm
 import segmentation_models_pytorch as smp
-from Dataset import Custom  
+from Dataset import Custom
 import os
 import matplotlib.pyplot as plt
 
@@ -11,8 +11,15 @@ import matplotlib.pyplot as plt
 # ===========================
 # Function to train the model
 # ===========================
-def train_model(model: torch.nn.Module, train_loader: DataLoader, val_loader: DataLoader,
-                device: torch.device, save_path: str, num_epochs: int = 20, lr: float = 1e-3) -> None:
+def train_model(
+    model: torch.nn.Module,
+    train_loader: DataLoader,
+    val_loader: DataLoader,
+    device: torch.device,
+    save_path: str,
+    num_epochs: int = 20,
+    lr: float = 1e-3,
+) -> None:
     """
     Trains the segmentation model and validates it on each epoch.
 
@@ -26,14 +33,14 @@ def train_model(model: torch.nn.Module, train_loader: DataLoader, val_loader: Da
     """
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    best_val_loss = float('inf')
+    best_val_loss = float("inf")
 
     train_losses = []
     val_losses = []
-    
+
     for epoch in range(num_epochs):
         print(f"\nEpoch {epoch+1}/{num_epochs}")
-        
+
         # Training phase
         model.train()
         train_loss = 0.0
@@ -53,12 +60,21 @@ def train_model(model: torch.nn.Module, train_loader: DataLoader, val_loader: Da
         print(f"Train Loss: {avg_train_loss:.6f}")
 
         # Validation phase
-        val_loss, mean_jaccard, mean_dice, mean_Recall, mean_Precision, mean_ConfIndex = validate_model(model, val_loader, criterion, device)
+        (
+            val_loss,
+            mean_jaccard,
+            mean_dice,
+            mean_Recall,
+            mean_Precision,
+            mean_ConfIndex,
+        ) = validate_model(model, val_loader, criterion, device)
         val_losses.append(val_loss)
-        print(f"Val Loss: {val_loss:.6f} | Mean Jaccard: {mean_jaccard:.6f} | Mean Dice: {mean_dice:.6f} | Mean Recall: {mean_Recall} | Mean Precision: {mean_Precision} | Mean ConfIndex: {mean_ConfIndex}")
-        
+        print(
+            f"Val Loss: {val_loss:.6f} | Mean Jaccard: {mean_jaccard:.6f} | Mean Dice: {mean_dice:.6f} | Mean Recall: {mean_Recall} | Mean Precision: {mean_Precision} | Mean ConfIndex: {mean_ConfIndex}"
+        )
+
         plot_train_val_loss(train_losses, val_losses)
-        
+
         # Save the best model
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -68,8 +84,12 @@ def train_model(model: torch.nn.Module, train_loader: DataLoader, val_loader: Da
 # ===========================
 # Function to evaluate the model
 # ===========================
-def validate_model(model: torch.nn.Module, val_loader: DataLoader, criterion: nn.Module,
-                   device: torch.device) -> tuple:
+def validate_model(
+    model: torch.nn.Module,
+    val_loader: DataLoader,
+    criterion: nn.Module,
+    device: torch.device,
+) -> tuple:
     """
     Validates the model on the validation set and computes metrics.
 
@@ -96,20 +116,31 @@ def validate_model(model: torch.nn.Module, val_loader: DataLoader, criterion: nn
             total_loss += loss.item()
 
             preds = torch.argmax(outputs, dim=1)
-            jaccard, dice, recall, precision, confindex = compute_mean_iou(preds, masks, num_classes=3)
+            jaccard, dice, recall, precision, confindex = compute_mean_iou(
+                preds, masks, num_classes=3
+            )
             Jaccard.append(jaccard)
             dices.append(dice)
             R.append(recall)
             P.append(precision)
             C.append(confindex)
 
-    return total_loss / len(val_loader), sum(Jaccard) / len(Jaccard), sum(dices) / len(dices), sum(R) / len(R), sum(P) / len(P), sum(C) / len(C)
+    return (
+        total_loss / len(val_loader),
+        sum(Jaccard) / len(Jaccard),
+        sum(dices) / len(dices),
+        sum(R) / len(R),
+        sum(P) / len(P),
+        sum(C) / len(C),
+    )
 
 
 # ===========================
 # Indexes for evaluation
 # ===========================
-def compute_mean_iou(preds: torch.Tensor, masks: torch.Tensor, num_classes: int) -> tuple:
+def compute_mean_iou(
+    preds: torch.Tensor, masks: torch.Tensor, num_classes: int
+) -> tuple:
     """
     Computes per-class and mean metrics for segmentation output.
 
@@ -123,7 +154,7 @@ def compute_mean_iou(preds: torch.Tensor, masks: torch.Tensor, num_classes: int)
     Recalls = []
     Precisions = []
     ConfmIndexs = []
-    
+
     for cls in range(num_classes):
         pred_inds = preds == cls
         target_inds = masks == cls
@@ -135,14 +166,20 @@ def compute_mean_iou(preds: torch.Tensor, masks: torch.Tensor, num_classes: int)
         Recall = intersection / (intersection + FN)
         Precision = intersection / (intersection + FP)
         ConfmIndex = 1 - (FP + FN) / (intersection)
-        
+
         Recalls.append(Recall)
         Precisions.append(Precision)
         ConfmIndexs.append(ConfmIndex)
         dice.append(2 * intersection / Sum)
         Jaccard.append(intersection / union)
-    
-    return sum(Jaccard) / len(Jaccard), sum(dice) / len(dice), sum(Recalls) / len(Recalls), sum(Precisions) / len(Precisions), sum(ConfmIndexs) / len(ConfmIndexs)
+
+    return (
+        sum(Jaccard) / len(Jaccard),
+        sum(dice) / len(dice),
+        sum(Recalls) / len(Recalls),
+        sum(Precisions) / len(Precisions),
+        sum(ConfmIndexs) / len(ConfmIndexs),
+    )
 
 
 # ===========================
@@ -167,4 +204,3 @@ def plot_train_val_loss(train_losses: list, val_losses: list) -> None:
     plt.grid(True)
     plt.tight_layout()
     plt.show()
-    

@@ -1,11 +1,11 @@
 import sys
-sys.path.append("../")  
+
+sys.path.append("../")
 
 import matplotlib.pyplot as plt
 import torch
 import numpy as np
 from Segmentation_methods.Dataset.Custom import class_to_rgb
-
 
 
 # ===========================
@@ -35,11 +35,17 @@ def show_sample(image: torch.Tensor, mask: np.ndarray, index: int = 0) -> None:
     plt.tight_layout()
     plt.show()
 
+
 # ===========================
-# Apply inference on a sample with 
+# Apply inference on a sample with
 # pretrained model
 # ===========================
-def inference(model: torch.nn.Module, test_loader: torch.utils.data.DataLoader, device: torch.device, save_path: str) -> None:
+def inference(
+    model: torch.nn.Module,
+    test_loader: torch.utils.data.DataLoader,
+    device: torch.device,
+    save_path: str,
+) -> None:
     """
     Performs inference on one sample from the test loader and displays the original image,
     the ground truth mask, and the predicted mask.
@@ -53,8 +59,10 @@ def inference(model: torch.nn.Module, test_loader: torch.utils.data.DataLoader, 
     model.load_state_dict(torch.load(save_path, map_location=device))
 
     model.eval()
-    image, mask_rgb, mask_true = next(iter(test_loader))  # image: [1, 3, H, W], mask_rgb: [1, H, W, 3], mask_true: [1, H, W]
-    
+    image, mask_rgb, mask_true = next(
+        iter(test_loader)
+    )  # image: [1, 3, H, W], mask_rgb: [1, H, W, 3], mask_true: [1, H, W]
+
     model = model.to(device)
     image = image.to(device)
 
@@ -65,8 +73,8 @@ def inference(model: torch.nn.Module, test_loader: torch.utils.data.DataLoader, 
     # Convert tensors to numpy arrays for visualization
     image_np = image[0].cpu().permute(1, 2, 0).numpy()  # [H, W, 3]
 
-    mask_pred = preds[0].cpu().numpy()                  # [H, W]
-    mask_pred_rgb = class_to_rgb(mask_pred)             # [H, W, 3]
+    mask_pred = preds[0].cpu().numpy()  # [H, W]
+    mask_pred_rgb = class_to_rgb(mask_pred)  # [H, W, 3]
 
     # Display original image, ground truth, and prediction
     fig, axes = plt.subplots(1, 3, figsize=(18, 6))

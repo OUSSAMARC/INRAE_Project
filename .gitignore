@@ -1,3 +1,4 @@
 *.pkl
 *.pickle
 *.egg-info
+*.env

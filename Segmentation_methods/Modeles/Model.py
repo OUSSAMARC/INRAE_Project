@@ -1,14 +1,19 @@
 import torchvision.models as models
 import torch.nn as nn
-import segmentation_models_pytorch as smp  
+import segmentation_models_pytorch as smp
 
 
 # ===========================
 # Build our segmentation model class
 # ===========================
 class SegmentationModelBuilder:
-    def __init__(self, backbone_name: str = "resnet34", arch: str = "Unet",
-                 num_classes: int = 3, encoder_weights: str = "imagenet") -> None:
+    def __init__(
+        self,
+        backbone_name: str = "resnet34",
+        arch: str = "Unet",
+        num_classes: int = 3,
+        encoder_weights: str = "imagenet",
+    ) -> None:
         self.backbone_name = backbone_name
         self.num_classes = num_classes
         self.encoder_weights = encoder_weights

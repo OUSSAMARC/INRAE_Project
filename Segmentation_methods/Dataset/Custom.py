@@ -7,7 +7,11 @@ from sklearn.model_selection import train_test_split
 
 
 COLOR_MAP: Dict[Tuple[int, int, int], int] = {(0, 0, 1): 2, (1, 0, 0): 0, (0, 1, 0): 1}
-CLASS_COLORS: Dict[int, Tuple[int, int, int]] = {2: (0, 0, 1), 0: (1, 0, 0), 1: (0, 1, 0)}
+CLASS_COLORS: Dict[int, Tuple[int, int, int]] = {
+    2: (0, 0, 1),
+    0: (1, 0, 0),
+    1: (0, 1, 0),
+}
 
 
 # ===========================
@@ -42,13 +46,13 @@ def class_to_rgb(mask_class: np.ndarray) -> np.ndarray:
     return rgb_mask
 
 
-
-
 # ===========================
 # Custom dataset class
 # ===========================
 class Custom(Dataset):
-    def __init__(self, image_pkl_path: str, mask_pkl_path: str, transform: Optional[Any] = None):
+    def __init__(
+        self, image_pkl_path: str, mask_pkl_path: str, transform: Optional[Any] = None
+    ):
         # Charge les images
         with open(image_pkl_path, "rb") as f:
             self.images = pickle.load(f).astype("float32")  # (N, H, W, 3)
@@ -75,13 +79,12 @@ class Custom(Dataset):
             image = self.transform(image)
 
         return image, mask_rgb_tensor, mask_class_tensor
-    
 
 
 # ===========================
-# Function to split the data 
+# Function to split the data
 # 80% for training the rest for testing
-# ===========================    
+# ===========================
 def split_data(images_path: str, masks_path: str, save_dir: str) -> None:
     """
     Splits the dataset into training (80%) and testing (20%) sets, and saves them.
