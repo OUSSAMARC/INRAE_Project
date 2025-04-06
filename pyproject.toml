@@ -2,7 +2,7 @@
 name = "segmentation_project"
 version = "0.1.0"
 description = "Plant disease segmentation using PyTorch"
-authors = [{ name="Rchaki", email="rchaki@example.com" }]
+authors = [{ name="Rchaki", email="oussamarchaki@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.9"
 
