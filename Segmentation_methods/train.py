@@ -7,7 +7,7 @@ from Dataset import Custom
 import os
 import matplotlib.pyplot as plt
 
-
+kskj= "hdg"
 # ===========================
 # Function to train the model
 # ===========================
