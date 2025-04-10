@@ -115,7 +115,7 @@ def validate_model(
             total_loss += loss.item()
 
             preds = torch.argmax(outputs, dim=1)
-            jaccard, dice, recall, precision, confindex = compute_mean_iou(
+            jaccard, dice, recall, precision, confindex = compute_Indexes_eval(
                 preds, masks, num_classes=3
             )
             Jaccard.append(jaccard)
@@ -137,7 +137,7 @@ def validate_model(
 # ===========================
 # Indexes for evaluation
 # ===========================
-def compute_mean_iou(
+def compute_Indexes_eval(
     preds: torch.Tensor, masks: torch.Tensor, num_classes: int
 ) -> tuple:
     """
